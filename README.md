@@ -1,4 +1,4 @@
-# Buenas practicas del poryecto
+# Buenas practicas del proyecto
 
 -.js --> por defecto usa CommonJS
 
