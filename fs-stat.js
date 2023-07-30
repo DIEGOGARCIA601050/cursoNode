@@ -1,3 +1,7 @@
+// const {promisify} = require('node:util')
+// const readFile = promisify(fs.readFile)
+//Solo usar en los modulos nativos que no tienen promesas nativas
+
 const fs = require('node:fs')
 
 console.log('leyendo el primer archivo  ...')
