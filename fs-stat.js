@@ -11,6 +11,16 @@ fs.readFile('./README.md', 'utf-8', (err, text) => {
 console.log('--------------------------------')
 
 console.log('leyendo el segundo archivo')
-fs.readFile('./fs.js', 'utf-8', (err, text) => {
+const fsinfo = fs.readFile('./fs.js', 'utf-8', (err, text) => {
     console.log(text)
+    fs.writeFile('./a.txt',`${text}`, function(err){
+        if(err){
+            console.log(err);
+        }
+        console.log('Listo');
+    });
+    return text
 })
+
+console.log('fin')
+console.log(fsinfo)
