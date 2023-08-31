@@ -15,6 +15,10 @@ console.log('leyendo el segundo archivo...')
 fs.readFile('./fs.js', 'utf-8')
         .then(text => {
         console.log('Segundo texto:', text)
+        fs.writeFile('./a.txt',`${text}`)
+        .then(text => {
+            console.log('Haber como sale:', text)
+            })
         }
     )
 
