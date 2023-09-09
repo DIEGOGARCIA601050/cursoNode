@@ -1,9 +1,11 @@
 const fs = require('node:fs')
-fs.readdir('../Personal projects',(err,files)=>{
+fs.readdir('.',(err,files)=>{
     if(err){
         console.log('error:',err)
         return
-    } else {
-        console.log('files:',files)
     }
+
+    files.forEach(file=>{
+        console.log(file)
+    })
 })
