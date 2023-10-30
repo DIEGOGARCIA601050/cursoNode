@@ -24,7 +24,7 @@ const JohnInfo = JohnI.toString();
 // Escribir información de María, Pablo y John en el archivo datos.txt
 (async () => {
   try {
-    await writeFile('./datos.txt', `${MariaInfo}\n${PabloInfo}\n${JohnInfo}\n`);
+    await writeFile('./datos.txt', `${MariaInfo}\n${PabloInfo}\n${JohnInfo}`);
     console.log('Archivo escrito exitosamente');
   } catch (err) {
     console.error(`Error al escribir archivo: ${err}`);
