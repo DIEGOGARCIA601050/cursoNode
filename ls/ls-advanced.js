@@ -1,34 +1,24 @@
-const fs = require('node:fs')
-const path = require('node:path')
+//* CON ASYNC AWAIT
 
-const folder = process.argv[2] ?? '.'
+//IMPORT MODULES
+const fs = require('node:fs/promises');
+const path = require('node:path');
 
-fs.readdir(folder,(err,files)=>{
-    if(err){
-        console.log('error:',err)
-        return
-    }
+//LS FUNCTION
+async function ls(directory) {
+    try {
+        const files = await fs.readdir(directory)
+        for (let i = 0; i < files.length; i++) {
+            console.log(files[i]);
+        }
+    }catch{err=>{
+        if(err){
+            console.log(`error de lectura ${err} en ${directory}`);
+            return
+        }
+    }}    
+}
 
-    files.forEach(file=>{
-        
-        const fileInfo = files.map(file=>{
-            const filePath = path.join(folder, file)
-            let stats 
-            try {
-                const fileStats = fs.stat(filePath)//status --> info del archivo
-                console.log(fileStats)
-
-            } catch {
-                console.log(`no se pudo leer el archivo ${folder}`)
-                process.exit(1)
-            }
-
-            const isDirectory  = stats.isDirectory()
-            console.log(isDirectory)
-            const fileType = isDirectory ? 'd' : 'N'
-            console.log(fileType)
-            const filesize = stats.size
-            console.log(filesize) 
-        })
-    })
-})
+//Parametros
+const folder = process.argv[2] ?? '.';
+ls(folder);

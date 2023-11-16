@@ -1,19 +1,27 @@
-const p = process
+const prcss =process
+const arrayp = prcss.argv
 let a = 2
 //argumentos de entrada
-console.log(p.argv)
-
+console.log(`en texto ${arrayp[2]+1}`);
+console.log(`en numero ${Number(arrayp[2])+1}`);
+for (let index = 0; index < arrayp.length; index++) {
+    console.log(`el elemento en la posición ${index} es ${arrayp[index]}`);
+}
 //controlar el proceso y su salida
-//p.exit(1)//con 0 todo bien y con 1 se detiene por un error
+//**  p.exit(1)//con 0 todo bien y con 1 se detiene por un error*/
 
-//Eventos del proceso
-// p.on('exit', ()=>{
-//     console.log('listo')
-// })
 
-//Current Work Directory
-console.log(p.cwd())
 
-// console.log(p.env.a)
-// console.log(p.env.b)
-// console.log(process.env.c)
+//Current Work Directory o directorio del que se está ejecutando
+console.log(prcss.cwd());
+
+//*variables de entorno
+console.log(prcss.env.b);//! solo funciona en Linux/Mac
+
+if(process.env.a!==undefined){
+        //Eventos del proceso
+    prcss.on('exit', ()=>{
+        console.log('se pudo leer el valor')
+    })
+    prcss.exit(1) //*despues de esta linea no se lee nada
+}
