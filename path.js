@@ -2,7 +2,7 @@ const path = require('node:path')
 
 console.log(path.sep)
 
-//unir rutas con path.join
+// unir rutas con path.join
 const filePath = path.join('cursoNode', 'mjs', 'a.txt')
 const base = path.basename(filePath)
 const fileName = path.basename(filePath, '.txt')

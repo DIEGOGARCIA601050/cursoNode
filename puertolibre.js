@@ -19,5 +19,4 @@ function buscarpuerto (puertoDes) {
     })
   })
 }
-buscarpuerto(3000)
 module.exports = { buscarpuerto }
