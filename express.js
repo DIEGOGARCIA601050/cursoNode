@@ -34,6 +34,11 @@ app.get('/pokemon/ditto', (req, res) => {
   res.json(ditto)
 })
 
+app.get('/pokemon/ditto/:id', (req, res) => {
+  const { id } = req.params
+  res.send(ditto.find(peli => peli.id === id))
+})
+
 app.post('/pokemon', (req, res) => {
   // req.body deberíamos guardar en bbdd
   res.status(201).json(req.body)

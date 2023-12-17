@@ -1,3 +1,4 @@
+const cors = require('cors')
 const http = require('node:http')
 
 // commonJS -> modulos clásicos de node
@@ -27,6 +28,7 @@ const processRequest = (req, res) => {
     case 'POST':
       switch (url) {
         case '/pokemon': {
+          cors()
           let body = ''
 
           // escuchar el evento data
@@ -37,6 +39,7 @@ const processRequest = (req, res) => {
           req.on('end', () => {
             const data = JSON.parse(body)
             // llamar a una base de datos para guardar la info
+            console.log(req.body)
             res.writeHead(201, { 'Content-Type': 'application/json; charset=utf-8' })
 
             data.timestamp = Date.now()
