@@ -1,5 +1,6 @@
 const express = require('express')
-const ditto = require('./pokemon/ditto.json')
+const ditto = require('./pokemon/movies.json')
+const { randomUUID } = require('node:crypto')
 const app = express()
 const port = 3000
 
@@ -30,18 +31,53 @@ app.get('/', (req, res) => {
   res.send('<h1>Pagina Principal</h1>')
 })
 
-app.get('/pokemon/ditto', (req, res) => {
+app.get('/pokemon/movies', (req, res) => {
   res.json(ditto)
 })
 
-app.get('/pokemon/ditto/:id', (req, res) => {
+app.get('/pokemon/movies/filter', (req, res) => {
+  const { genre, title, director } = req.query
+  // function filter (query) {
+  //   if (query) {
+  //     res.json(ditto.filter(movie => movie.query === query))
+  //   }
+  // }
+  if (genre) {
+    res.json(ditto.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase())))
+  }
+  // filter(director)
+  if (title) {
+    res.json(ditto.filter(movie => movie.title === title))
+  }
+  if (director) {
+    res.json(ditto.filter(movie => movie.director === director))
+  }
+}
+)
+
+app.get('/pokemon/movies/:id', (req, res) => {
   const { id } = req.params
   res.send(ditto.find(peli => peli.id === id))
 })
 
 app.post('/pokemon', (req, res) => {
+  const data = req.body
+  const { name, genre, rate, duration, watched } = data
+  // data.id = global.crypto.randomUUID
+  if (!name || !genre || !rate || !duration) {
+    return res.status(400).send('Missing data')
+  }
+  const NewMovie = {
+    id: randomUUID(),
+    name,
+    genre,
+    rate,
+    duration,
+    watched: watched ?? 0
+  }
+  ditto.push(NewMovie)
   // req.body deberíamos guardar en bbdd
-  res.status(201).json(req.body)
+  res.status(201).json(NewMovie)
 })
 
 // la última a la que va a llegar
