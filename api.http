@@ -15,8 +15,8 @@ POST http://localhost:3000/pokemon
 Content-Type: application/json
 
 {
-  "name": "El ultimo maestro aire",
-  "genre": ["action", "romance"],
+  "name": "El Padrino",
+  "genre": ["Action", "Crime"],
   "rate": 2,
   "duration": 120,
   "watched": true

@@ -1,4 +1,5 @@
 const express = require('express')
+const { ValidateMovie } = require('./schemas/schemaMovie')
 const ditto = require('./pokemon/movies.json')
 const { randomUUID } = require('node:crypto')
 const app = express()
@@ -63,21 +64,20 @@ app.get('/pokemon/movies/:id', (req, res) => {
 app.post('/pokemon', (req, res) => {
   const data = req.body
   const { name, genre, rate, duration, watched } = data
-  // data.id = global.crypto.randomUUID
-  if (!name || !genre || !rate || !duration) {
-    return res.status(400).send('Missing data')
+  const V = ValidateMovie(data)
+  if (V) {
+    const NewMovie = {
+      id: randomUUID(),
+      name,
+      genre,
+      rate,
+      duration,
+      watched: watched ?? 0
+    }
+    ditto.push(NewMovie)
+    // req.body deberíamos guardar en bbdd
+    res.status(201).json(NewMovie)
   }
-  const NewMovie = {
-    id: randomUUID(),
-    name,
-    genre,
-    rate,
-    duration,
-    watched: watched ?? 0
-  }
-  ditto.push(NewMovie)
-  // req.body deberíamos guardar en bbdd
-  res.status(201).json(NewMovie)
 })
 
 // la última a la que va a llegar
