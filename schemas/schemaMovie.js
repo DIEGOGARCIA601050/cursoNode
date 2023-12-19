@@ -15,17 +15,12 @@ const movieSchema = z.object({
   rate: z.number().min(0).max(10),
   watched: z.boolean({
     invalid_type_error: 'Dato ingresado incorrecto'
-  })
+  }).default(false)
 })
 
 function ValidateMovie (object) {
   const validate = movieSchema.safeParse(object)
-  console.log(validate)
-  if (validate.success) {
-    return true
-  } else if (!validate.success) {
-    return false
-  }
+  return validate
 }
 module.exports = {
   ValidateMovie

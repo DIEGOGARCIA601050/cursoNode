@@ -21,3 +21,27 @@ Content-Type: application/json
   "duration": 120,
   "watched": true
 }
+
+###
+POST http://localhost:3000/pokemon
+Content-Type: application/json
+
+{
+  "name": "El Padrino",
+  "genre": ["Action", "Crime"],
+  "rate": 2,
+  "duration": "120",
+  "watched": true
+}
+
+###
+POST http://localhost:3000/pokemon
+Content-Type: application/json
+
+{
+  "name": "El Ultimo maestro aire",
+  "genre": ["Action", "Romance"],
+  "rate": 2,
+  "duration": 120,
+  "watched": true
+}

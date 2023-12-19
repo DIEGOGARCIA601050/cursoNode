@@ -38,45 +38,53 @@ app.get('/pokemon/movies', (req, res) => {
 
 app.get('/pokemon/movies/filter', (req, res) => {
   const { genre, title, director } = req.query
-  // function filter (query) {
-  //   if (query) {
-  //     res.json(ditto.filter(movie => movie.query === query))
-  //   }
-  // }
   if (genre) {
-    res.json(ditto.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase())))
+    res.status(302).json(ditto.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase())))
   }
-  // filter(director)
   if (title) {
-    res.json(ditto.filter(movie => movie.title === title))
+    res.status(302).json(ditto.filter(movie => movie.title === title))
   }
   if (director) {
-    res.json(ditto.filter(movie => movie.director === director))
+    res.status(302).json(ditto.filter(movie => movie.director === director))
   }
 }
 )
 
 app.get('/pokemon/movies/:id', (req, res) => {
   const { id } = req.params
-  res.send(ditto.find(peli => peli.id === id))
+  res.status(302).send(ditto.find(peli => peli.id === id))
 })
 
-app.post('/pokemon', (req, res) => {
+app.post('/pokemon/movies', (req, res) => {
   const data = req.body
-  const { name, genre, rate, duration, watched } = data
-  const V = ValidateMovie(data)
-  if (V) {
+
+  const Vali = ValidateMovie(data)
+  if (Vali.success) {
+    // 422 Unprocesable Entity
+    // en base de datos
     const NewMovie = {
       id: randomUUID(),
-      name,
-      genre,
-      rate,
-      duration,
-      watched: watched ?? 0
+      ...data
     }
     ditto.push(NewMovie)
     // req.body deberíamos guardar en bbdd
     res.status(201).json(NewMovie)
+  } else {
+    res.status(400).send(`Eror en la info ${Vali.error}`)
+  }
+})
+
+app.patch('/pokemon/movies/:id', (req, res) => {
+  const { rate } = req.query
+  const { id } = req.params
+  const movieIndex = ditto.findIndex(movie => movie.id === id)
+  if (movieIndex === -1) {
+    res.status(404).send('Peli no encontrada, verifica la URL')
+  }
+  const movie = ditto[movieIndex]
+  if (rate) {
+    movie.rate = rate
+    res.status(204)
   }
 })
 
@@ -86,5 +94,5 @@ app.use((req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`https://localhost:${port}`)
+  console.log(`http://localhost:${port}`)
 })
