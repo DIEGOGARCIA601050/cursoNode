@@ -1,6 +1,7 @@
 const express = require('express')
-const { ValidateMovie } = require('./schemas/schemaMovie')
-const ditto = require('./pokemon/movies.json')
+const cors = require('cors')
+const { ValidateMovie, validateParcialMovie } = require('./schemas/schemaMovie')
+const movies = require('./pokemon/movies.json')
 const { randomUUID } = require('node:crypto')
 const app = express()
 const port = 3000
@@ -8,6 +9,21 @@ const port = 3000
 app.disable('x-powered-by')
 
 app.use(express.json())
+app.use(cors({
+  origin: (origin, callback) => {
+    const AceptedOrigins = [
+      '*',
+      'dominio.example'
+    ]
+    if (AceptedOrigins.includes(origin)) {
+      return callback(null, true)
+    }
+    if (!origin) {
+      return callback(null, true)
+    }
+    return callback(new Error('No hay cors'))
+  }
+}))
 
 // app.use((req, res, next) => {
 //   if (req !== 'POST') return next()
@@ -33,26 +49,27 @@ app.get('/', (req, res) => {
 })
 
 app.get('/pokemon/movies', (req, res) => {
-  res.json(ditto)
+  res.json(movies)
 })
 
 app.get('/pokemon/movies/filter', (req, res) => {
   const { genre, title, director } = req.query
   if (genre) {
-    res.status(302).json(ditto.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase())))
+    res.status(302).json(movies.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase())))
   }
   if (title) {
-    res.status(302).json(ditto.filter(movie => movie.title === title))
+    res.status(302).json(movies.filter(movie => movie.title === title))
   }
   if (director) {
-    res.status(302).json(ditto.filter(movie => movie.director === director))
+    res.status(302).json(movies.filter(movie => movie.director === director))
   }
 }
 )
 
 app.get('/pokemon/movies/:id', (req, res) => {
   const { id } = req.params
-  res.status(302).send(ditto.find(peli => peli.id === id))
+  const foundMovie = movies.find(movie => movie.id === id)
+  if (foundMovie) { res.status(302).send(foundMovie) } else { res.status(400).send('id no valida') }
 })
 
 app.post('/pokemon/movies', (req, res) => {
@@ -66,25 +83,38 @@ app.post('/pokemon/movies', (req, res) => {
       id: randomUUID(),
       ...data
     }
-    ditto.push(NewMovie)
+    movies.push(NewMovie)
     // req.body deberíamos guardar en bbdd
     res.status(201).json(NewMovie)
   } else {
-    res.status(400).send(`Eror en la info ${Vali.error}`)
+    res.status(400).send(`Eror en la info ${Vali.error.message}`)
   }
 })
 
 app.patch('/pokemon/movies/:id', (req, res) => {
-  const { rate } = req.query
   const { id } = req.params
-  const movieIndex = ditto.findIndex(movie => movie.id === id)
+  const result = validateParcialMovie(req.body)
+  if (!result.success) {
+    res.status(400).send(result.error.message)
+  }
+  const movieIndex = movies.findIndex(movie => movie.id === id)
   if (movieIndex === -1) {
     res.status(404).send('Peli no encontrada, verifica la URL')
   }
-  const movie = ditto[movieIndex]
-  if (rate) {
-    movie.rate = rate
-    res.status(204)
+  const UpdateMovie = {
+    ...movies[movieIndex],
+    ...result.data
+  }
+  movies[movieIndex] = UpdateMovie
+  return res.json(movies[movieIndex])
+})
+
+app.delete('/pokemon/movies/:id', (req, res) => {
+  const { id } = req.params
+  const movieIndex = movies.findIndex(movie => movie.id === id)
+  if (movieIndex > 0) {
+    movies.splice(movieIndex, 1)
+    res.send(movies)
   }
 })
 
