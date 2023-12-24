@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "nodejsapi",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev1": "nodemon ./http.js",
     "dev2": "nodemon ./routing.js",
