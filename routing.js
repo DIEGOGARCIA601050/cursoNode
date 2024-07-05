@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const node_http_1 = __importDefault(require("node:http"));
 // commonJS -> módulos clásicos de node
-const movies_json_1 = __importDefault(require("./pokemon/movies.json"));
+const dittoJSON = require('./pokemon/movies.json');
 const processRequest = (req, res) => {
     const { method, url } = req;
     switch (method) {
@@ -19,7 +19,7 @@ const processRequest = (req, res) => {
                     return res.end('<h1>Contactanos</h1>');
                 case '/pokemon/ditto':
                     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-                    return res.end(JSON.stringify(movies_json_1.default));
+                    return res.end(JSON.stringify(dittoJSON));
                 default:
                     res.statusCode = 404;
                     res.setHeader('Content-Type', 'text/html; charset=utf-8');

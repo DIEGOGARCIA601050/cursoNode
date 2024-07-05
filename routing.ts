@@ -2,7 +2,7 @@ import cors from "cors";
 import http from "node:http";
 
 // commonJS -> módulos clásicos de node
-import dittoJSON from "./pokemon/movies.json";
+const dittoJSON = require('./pokemon/movies.json')
 type DittoID = `${string}-${string}-${string}-${string}-${string}`
 type Ditto = {
     id:DittoID
