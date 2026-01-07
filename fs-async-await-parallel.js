@@ -7,11 +7,11 @@ const { readFile } = require('node:fs/promises');
 Promise.all([
   readFile('./README.md', 'utf-8'),
   readFile('./fs.js', 'utf-8')
-]).then((promises)=>{
-  if(Array.isArray(promises))
-  {
-    for(i=0;i<promises.length;i++)
-    {
-      console.log(`i°: ${promises[i]}`)
+]).then((promises) => {
+  if (Array.isArray(promises)) {
+    for (i = 0; i < promises.length; i++) {
+      console.log(`${i + 1}°: ${promises[i]}`)
+      console.log('----------------------------------')
     }
+  }
 })
